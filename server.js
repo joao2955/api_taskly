@@ -37,6 +37,20 @@ app.post('/query', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('API rodando em http://localhost:3000');
+// Porta
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, () => {
+  const host = server.address().address === '::' ? 'localhost' : server.address().address;
+  const port = server.address().port;
+
+  console.log(`API rodando em http://${host}:${port}`);
+
+  console.log('Rotas disponíveis:');
+  app._router.stack.forEach(middleware => {
+    if (middleware.route) {
+      const methods = Object.keys(middleware.route.methods).join(', ').toUpperCase();
+      console.log(`${methods} ${middleware.route.path}`);
+    }
+  });
 });
