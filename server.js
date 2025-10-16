@@ -22,30 +22,28 @@ db.connect(err => {
 
 app.post('/query', (req, res) => {
   const { sql } = req.body;
-
   if (!sql) {
     return res.status(400).json({ error: 'Campo "sql" é obrigatório' });
   }
-
   db.query(sql, (err, results) => {
     if (err) {
       console.error('Erro na consulta:', err);
       return res.status(400).json({ error: err.message });
     }
-
     res.json({ results });
   });
 });
 
-// Porta
-const PORT = process.env.PORT || 3000;
+app.use((req, res, next) => {
+  console.error(`404: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ error: 'Rota não encontrada' });
+});
 
+const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   const host = server.address().address === '::' ? 'localhost' : server.address().address;
   const port = server.address().port;
-
   console.log(`API rodando em http://${host}:${port}`);
-
   console.log('Rotas disponíveis:');
   app._router.stack.forEach(middleware => {
     if (middleware.route) {
