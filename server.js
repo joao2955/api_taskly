@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const pool = mysql.createPool({
   host: process.env.MYSQLHOST || 'mysql.railway.internal',
