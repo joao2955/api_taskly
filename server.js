@@ -20,8 +20,7 @@ console.log('Pool de conexões MySQL pronto.');
 
 
 app.post('/query', (req, res) => {
-  console.log(req);
-  
+
   const { sql } = req.body;
 
   if (!sql) {
